@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todo_app_project/features/todo_details/ui/theme.dart';
@@ -58,7 +60,7 @@ class _InputFieldState extends State<InputField> {
                     widget.icondata,
                     color: Get.isDarkMode ? Colors.white : Colors.grey,
                   )
-                : Container(margin: EdgeInsets.only(right: 10), child: widget.widget),
+                : Container(margin: const EdgeInsets.only(right: 10), child: widget.widget),
             hintText: widget.hint,
             hintStyle:
                 TextStyle(color: Get.isDarkMode ? Colors.white70 : Colors.grey),

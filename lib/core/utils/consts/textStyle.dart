@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 
 headingText({required String text, required Color color, required double fontSize, required FontWeight fontWeight}) {

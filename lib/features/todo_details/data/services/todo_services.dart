@@ -1,8 +1,6 @@
 // ignore_for_file: unnecessary_null_comparison
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:todo_app_project/core/data/model/api_response.dart';
 
 import '../model/todo_model.dart';
@@ -20,14 +18,12 @@ class ToDoDetailsServices {
 
       dataList = querySnapshot.docs
           .map((doc) {
-            print(doc.id);
           return TodoList.fromJson(doc.data());
           } )
           .where((todoList) => todoList != null) // Remove null entries
           .toList();
       apiResponse = Response.success(dataList);
     } catch (error) {
-      print("Error loading data from Firestore: $error");
       apiResponse = Response.error("Error loading data from Firestore", 500);
     }
 
@@ -57,7 +53,6 @@ fetchData();
     // Convert the added document data to a TodoList object
     return TodoList.fromJson(addedDoc.data() ?? {});
   } catch (error) {
-    print('Error adding TodoList: $error');
     return null;
   }
 }
@@ -77,13 +72,11 @@ Future<TodoList?> deleteTodoItem({required String documentId}) async {
 DocumentSnapshot<Map<String, dynamic>> addedDoc = await documentReference.get();
       return TodoList.fromJson(addedDoc.data() ?? {});
   } catch (error) {
-    print('Error adding TodoList: $error');
     return null;
   }
 }
 Future<TodoList?> completeTodoItem({required String documentId}) async {
    if (documentId.isEmpty) {
-      print('Error updating TodoList: Document ID is empty');
       return null;
     }
   try {
@@ -107,7 +100,6 @@ Map<String, dynamic> updatedData = {
     // Return the TodoList instance representing the updated document
     return TodoList.fromJson(updatedDoc.data() ?? {});
   } catch (error) {
-    print('Error updating TodoList: $error');
     return null;
   }
 }
@@ -125,18 +117,16 @@ Future<TodoList?> deleteCollectionAndReturnItem() async {
     for (QueryDocumentSnapshot<Map<String, dynamic>> documentSnapshot in querySnapshot.docs) {
       // Capture the data of a specific document before deleting the collection
       // if (documentSnapshot.data()?['id'] == 'your_criteria') {
-        deletedTodo = TodoList.fromJson(documentSnapshot.data() ?? {});
+        deletedTodo = TodoList.fromJson(documentSnapshot.data());
       // }
 
       await documentSnapshot.reference.delete();
     }
 
-    print('Collection deleted successfully!');
     
     // Return TodoList instance based on the criteria
     return deletedTodo;
   } catch (error) {
-    print('Error deleting collection: $error');
     return null;
   }
 }

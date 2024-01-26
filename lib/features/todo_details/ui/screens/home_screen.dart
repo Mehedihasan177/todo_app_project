@@ -1,5 +1,5 @@
-import 'package:date_picker_timeline/date_picker_timeline.dart';
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/svg.dart';
@@ -21,8 +21,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final TaskController _taskController = Get.put(TaskController());
-  // NotifyHelper notifyHelper = NotifyHelper();
-  DateTime _selectedate = DateTime.now();
 
   @override
   void initState() {
@@ -51,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      '${DateFormat.yMMMMd().format(DateTime.now())}',
+                      DateFormat.yMMMMd().format(DateTime.now()),
                       style: Themes().homeScreenSubHeadingTextStyle,
                     ),
                     Row(
@@ -95,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _tasks() {
     return Expanded(child: Obx(() {
       if(_taskController.isLoading.value){
-        return Center(child: CircularProgressIndicator(),);
+        return const Center(child: CircularProgressIndicator(),);
       }
       else if (_taskController.dataList.isEmpty) {
         return _noTasksMessage();

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_app_project/core/app_component/app_component.dart';
@@ -26,7 +25,7 @@ final RxBool isLoading = false.obs;
  TimeOfDay  selecteTime = TimeOfDay.now();
   RxString startDate = DateFormat('hh:mm a').format(DateTime.now()).obs;
   RxString endDate =
-      DateFormat('hh:mm a').format(DateTime.now().add(Duration(minutes: 15))).obs;
+      DateFormat('hh:mm a').format(DateTime.now().add(const Duration(minutes: 15))).obs;
 
   Future<RxList> fetchToDoList() async {
     isLoading.value = true;
@@ -34,16 +33,13 @@ final RxBool isLoading = false.obs;
     try {
       final questionPassUseCase = ToDoDetailsPassUseCase(locator<ToDoDetailsRepository>());
       var response = await questionPassUseCase();
-      print("response ${response.data?.first.startTime}");
       // Additional logic based on the response
       if (response.data != null) {
         dataList.addAll(response.data!);
         isLoading.value = false;
       }
-      print(dataList.first.startTime);
     } catch (error) {
       // isLoading.value = false;
-      print("Error loading data: $error");
       // Handle errors here, if needed
     }finally{
       isLoading.value = false;
@@ -56,14 +52,12 @@ final RxBool isLoading = false.obs;
     try {
       final addToDoListPassUseCase = AddToDoListPassUseCase(locator<ToDoDetailsRepository>());
       var response = await addToDoListPassUseCase(title: titleController.value.text, note: noteController.value.text, date: dateController.value.text, startTime: startTimeController.value.text, endTime: endTimeController.value.text);
-      print("response ${response.isBlank}");
       if (response.isBlank == false) {
 // successToast(context: navigatorKey.currentContext!, msg: "Successfully Added");
         isAddTodoItem.value = false;
       }
       
     } catch (error) {
-      print("Error loading data: $error");
       errorToast(context: navigatorKey.currentContext!, msg: error.toString());
       // Handle errors here, if needed
     }
@@ -75,14 +69,12 @@ final RxBool isLoading = false.obs;
     try {
       final addToDoListPassUseCase = DeleteTodoPassUseCase(locator<ToDoDetailsRepository>());
       var response = await addToDoListPassUseCase(documentId: documentId ?? '');
-      print("response ${response.isBlank}");
       if (response.isBlank == false) {
 // successToast(context: navigatorKey.currentContext!, msg: "Successfully Added");
         isAddTodoItem.value = false;
       }
       
     } catch (error) {
-      print("Error loading data: $error");
       errorToast(context: navigatorKey.currentContext!, msg: error.toString());
       // Handle errors here, if needed
     }
@@ -92,14 +84,12 @@ final RxBool isLoading = false.obs;
     try {
       final addToDoListPassUseCase = CompleteTodoPassUseCase(locator<ToDoDetailsRepository>());
       var response = await addToDoListPassUseCase(documentId: documentId ?? '');
-      print("response ${response.isBlank}");
       if (response.isBlank == false) {
 // successToast(context: navigatorKey.currentContext!, msg: "Successfully Added");
         isComplete.value = false;
       }
       
     } catch (error) {
-      print("Error loading data: $error");
       errorToast(context: navigatorKey.currentContext!, msg: error.toString());
       // Handle errors here, if needed
     }finally{
@@ -111,7 +101,6 @@ final RxBool isLoading = false.obs;
     try {
       final addToDoListPassUseCase = DeleteCollectionAndReturnItem(locator<ToDoDetailsRepository>());
       var response = await addToDoListPassUseCase();
-      print("response ${response.isBlank}");
       if (response.isBlank == false) {
         dataList.clear();
 // successToast(context: navigatorKey.currentContext!, msg: "Successfully Added");
@@ -119,7 +108,6 @@ final RxBool isLoading = false.obs;
       }
       
     } catch (error) {
-      print("Error loading data: $error");
       errorToast(context: navigatorKey.currentContext!, msg: error.toString());
       // Handle errors here, if needed
     }finally{

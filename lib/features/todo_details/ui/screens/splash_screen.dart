@@ -1,7 +1,8 @@
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:todo_app_project/features/todo_details/ui/screens/home_screen.dart';
+import 'package:todo_app_project/core/routes/router.dart';
+
+import '../../../../core/routes/route_name.dart';
 
 
 class SplashScreen extends StatefulWidget {
@@ -15,7 +16,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 2),(){
-      Get.offAll(HomeScreen());
+            RouteGenerator.pushNamedAndRemoveAll(context, Routes.homepage);
     });
     super.initState();
   }
@@ -33,14 +34,14 @@ class _SplashScreenState extends State<SplashScreen> {
                 child: Image.asset("images/logo.png", height: 200, width:  200,),
               ),
             ),
-            Center(
+            const Center(
               child: SizedBox(
                 height: 30,
                 width: 30,
                 child: CircularProgressIndicator(
                   backgroundColor: Colors.white,
                   valueColor:
-                      const AlwaysStoppedAnimation<Color>(Colors.red),
+                      AlwaysStoppedAnimation<Color>(Colors.red),
                 ),
               ),
             ),

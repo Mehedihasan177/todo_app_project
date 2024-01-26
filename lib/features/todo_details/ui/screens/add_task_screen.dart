@@ -1,7 +1,6 @@
-import 'dart:ffi';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -33,7 +32,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         backgroundColor: Theme.of(context).primaryColor,
         appBar: CustomAppBar(
           leadingWidget: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () => Get.back(),
           ),
         ),
@@ -41,7 +40,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
           () => SafeArea(
             child: SingleChildScrollView(
               child: Container(
-                margin: EdgeInsets.only(top: 15, left: 20, right: 20),
+                margin: const EdgeInsets.only(top: 15, left: 20, right: 20),
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -85,11 +84,11 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                       InputField(
                         controller: taskController.dateController.value,
                         isEnabled: false,
-                        hint: '${DateFormat.yMd().format(DateTime.now())}',
+                        hint: DateFormat.yMd().format(DateTime.now()),
                         label: 'Date',
                         iconOrdrop: 'button',
                         widget: IconButton(
-                          icon: Icon(Icons.date_range),
+                          icon: const Icon(Icons.date_range),
                           onPressed: () async {
                             _selectDate(context);
                           },
@@ -111,7 +110,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                                 iconOrdrop: 'button',
                                 hint: taskController.startDate.value.toString(),
                                 widget: IconButton(
-                                  icon: Icon(Icons.access_time),
+                                  icon: const Icon(Icons.access_time),
                                   onPressed: () async {
                                     _selectStartTime(context);
                                     // });
@@ -128,7 +127,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                                 label: 'End Time',
                                 hint: taskController.endDate.value.toString(),
                                 widget: IconButton(
-                                  icon: Icon(Icons.access_time),
+                                  icon: const Icon(Icons.access_time),
                                   onPressed: () {
                                     _selectEndTime(context);
                                   },
@@ -144,7 +143,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           //_colorPallete(),
-                         taskController.isAddTodoItem.value? Center(child: CircularProgressIndicator()) :ButtonWidget(
+                         taskController.isAddTodoItem.value? const Center(child: CircularProgressIndicator()) :ButtonWidget(
                               label: 'Add Task',
                               onTap: () async {
                                 
@@ -153,7 +152,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                                   taskController.endTimeController.value.text =
                                       DateFormat('hh:mm a').format(
                                           DateTime.now()
-                                              .add(Duration(minutes: 15)));
+                                              .add(const Duration(minutes: 15)));
                                 }
                                 if (taskController
                                     .startTimeController.value.text.isEmpty) {

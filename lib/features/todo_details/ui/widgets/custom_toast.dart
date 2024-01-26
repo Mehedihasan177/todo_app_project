@@ -71,7 +71,7 @@ void errorToast({required BuildContext context, required String msg}) {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              Container(
+              SizedBox(
                 width: getWidth(context)*0.6,
                 child: Text(
                   msg,
@@ -96,7 +96,7 @@ showLoaderDialog(BuildContext context, String message){
     content:  Row(
       children: [
        const CircularProgressIndicator(),
-        Container(margin: EdgeInsets.only(left: 7),child:Text('$message...')),
+        Container(margin: const EdgeInsets.only(left: 7),child:Text('$message...')),
       ],),
   );
   showDialog(barrierDismissible: false,

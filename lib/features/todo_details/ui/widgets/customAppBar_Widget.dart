@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:flutter/material.dart';
 import 'package:todo_app_project/core/services/theme_services.dart';
 import 'package:get/get.dart';
@@ -10,7 +12,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text("To Do App", style: TextStyle(fontWeight: FontWeight.bold),),
+      title: const Text("To Do App", style: TextStyle(fontWeight: FontWeight.bold),),
       backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
       elevation: 0,
       leading: leadingWidget,
@@ -31,5 +33,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

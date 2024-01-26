@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
@@ -13,11 +15,13 @@ void main() async{
   await GetStorage.init();
   await init();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(const MyApp());
 
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   // This widget is the root of your application.
   @override
   _MyAppState createState() => _MyAppState();

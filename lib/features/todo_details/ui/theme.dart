@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -40,7 +42,7 @@ class Themes {
           color: Get.isDarkMode ? Colors.white : darkGreyClr));
 
   TextStyle get notificationScreenBodyTextStyle => GoogleFonts.lato(
-      textStyle: TextStyle(
+      textStyle: const TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w300,
           color: Colors.white));
@@ -58,7 +60,7 @@ class Themes {
           color: Get.isDarkMode ? Colors.white : darkGreyClr));
 
   TextStyle get taskTileHeadingTextStyle => GoogleFonts.lato(
-      textStyle: TextStyle(
+      textStyle: const TextStyle(
           fontSize: 20,
           fontWeight: FontWeight.w600,
           color: Colors.white));
