@@ -5,12 +5,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:todo_app_project/controllers/task_controller.dart';
-import 'package:todo_app_project/models/task.dart';
-import 'package:todo_app_project/ui/theme.dart';
-import 'package:todo_app_project/ui/widgets/buttonWidget.dart';
-import 'package:todo_app_project/ui/widgets/customAppBar_Widget.dart';
-import 'package:todo_app_project/ui/widgets/input_field.dart';
+import 'package:todo_app_project/features/todo_details/ui/controllers/task_controller.dart';
+import 'package:todo_app_project/features/todo_details/ui/theme.dart';
+import 'package:todo_app_project/features/todo_details/ui/widgets/buttonWidget.dart';
+import 'package:todo_app_project/features/todo_details/ui/widgets/customAppBar_Widget.dart';
+import 'package:todo_app_project/features/todo_details/ui/widgets/input_field.dart';
 
 class AddTaskScreen extends StatefulWidget {
   const AddTaskScreen({Key? key}) : super(key: key);

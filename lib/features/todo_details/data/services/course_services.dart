@@ -7,7 +7,7 @@ import 'package:todo_app_project/core/data/model/api_response.dart';
 
 import '../model/course_model.dart';
 
-class CourseDetailsServices {
+class ToDoDetailsServices {
   final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;
 
   Future<Response<List<TodoList>?>> fetchData() async {
@@ -112,5 +112,33 @@ Map<String, dynamic> updatedData = {
   }
 }
 
+
+Future<TodoList?> deleteCollectionAndReturnItem() async {
+  try {
+    CollectionReference<Map<String, dynamic>> collectionReference =
+        FirebaseFirestore.instance.collection('todoList');
+
+    QuerySnapshot<Map<String, dynamic>> querySnapshot = await collectionReference.get();
+
+    TodoList? deletedTodo;
+
+    for (QueryDocumentSnapshot<Map<String, dynamic>> documentSnapshot in querySnapshot.docs) {
+      // Capture the data of a specific document before deleting the collection
+      // if (documentSnapshot.data()?['id'] == 'your_criteria') {
+        deletedTodo = TodoList.fromJson(documentSnapshot.data() ?? {});
+      // }
+
+      await documentSnapshot.reference.delete();
+    }
+
+    print('Collection deleted successfully!');
+    
+    // Return TodoList instance based on the criteria
+    return deletedTodo;
+  } catch (error) {
+    print('Error deleting collection: $error');
+    return null;
+  }
+}
 
 }

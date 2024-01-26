@@ -3,16 +3,14 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_app_project/core/app_component/app_component.dart';
-import 'package:todo_app_project/course_details_play/domain/repository/course_repository.dart';
-import 'package:todo_app_project/course_details_play/domain/usecase/course_pass_usecase.dart';
+import 'package:todo_app_project/features/todo_details/domain/repository/course_repository.dart';
+import 'package:todo_app_project/features/todo_details/domain/usecase/course_pass_usecase.dart';
 import 'package:todo_app_project/main.dart';
-import 'package:todo_app_project/models/task.dart';
-import 'package:todo_app_project/ui/widgets/custom_toast.dart';
+import 'package:todo_app_project/features/todo_details/ui/widgets/custom_toast.dart';
 
-import '../course_details_play/data/model/course_model.dart';
+import '../../data/model/course_model.dart';
 
 class TaskController extends GetxController {
-  final RxList taskList = <Task>[].obs;
   var selectDate = DateTime.now().obs;
  RxList<TodoList> dataList = <TodoList>[].obs;
    final Rx<TextEditingController> titleController = TextEditingController().obs;
@@ -34,7 +32,7 @@ final RxBool isLoading = false.obs;
     isLoading.value = true;
     dataList.clear();
     try {
-      final questionPassUseCase = CourseDetailsPassUseCase(locator<CourseDetailsRepository>());
+      final questionPassUseCase = ToDoDetailsPassUseCase(locator<ToDoDetailsRepository>());
       var response = await questionPassUseCase();
       print("response ${response.data?.first.startTime}");
       // Additional logic based on the response
@@ -56,7 +54,7 @@ final RxBool isLoading = false.obs;
   Future<void> addToDoList() async {
     isAddTodoItem.value = true;
     try {
-      final addToDoListPassUseCase = AddToDoListPassUseCase(locator<CourseDetailsRepository>());
+      final addToDoListPassUseCase = AddToDoListPassUseCase(locator<ToDoDetailsRepository>());
       var response = await addToDoListPassUseCase(title: titleController.value.text, note: noteController.value.text, date: dateController.value.text, startTime: startTimeController.value.text, endTime: endTimeController.value.text);
       print("response ${response.isBlank}");
       if (response.isBlank == false) {
@@ -75,7 +73,7 @@ final RxBool isLoading = false.obs;
   Future<void> deleteTodoList({String? documentId}) async {
     isAddTodoItem.value = true;
     try {
-      final addToDoListPassUseCase = DeleteTodoPassUseCase(locator<CourseDetailsRepository>());
+      final addToDoListPassUseCase = DeleteTodoPassUseCase(locator<ToDoDetailsRepository>());
       var response = await addToDoListPassUseCase(documentId: documentId ?? '');
       print("response ${response.isBlank}");
       if (response.isBlank == false) {
@@ -92,10 +90,30 @@ final RxBool isLoading = false.obs;
   Future<void> completeTodoListItem({String? documentId}) async {
     isComplete.value = true;
     try {
-      final addToDoListPassUseCase = CompleteTodoPassUseCase(locator<CourseDetailsRepository>());
+      final addToDoListPassUseCase = CompleteTodoPassUseCase(locator<ToDoDetailsRepository>());
       var response = await addToDoListPassUseCase(documentId: documentId ?? '');
       print("response ${response.isBlank}");
       if (response.isBlank == false) {
+// successToast(context: navigatorKey.currentContext!, msg: "Successfully Added");
+        isComplete.value = false;
+      }
+      
+    } catch (error) {
+      print("Error loading data: $error");
+      errorToast(context: navigatorKey.currentContext!, msg: error.toString());
+      // Handle errors here, if needed
+    }finally{
+      isComplete.value = false;
+    }
+  }
+  Future<void> deleteCollectionAndReturnItem() async {
+    isComplete.value = true;
+    try {
+      final addToDoListPassUseCase = DeleteCollectionAndReturnItem(locator<ToDoDetailsRepository>());
+      var response = await addToDoListPassUseCase();
+      print("response ${response.isBlank}");
+      if (response.isBlank == false) {
+        dataList.clear();
 // successToast(context: navigatorKey.currentContext!, msg: "Successfully Added");
         isComplete.value = false;
       }

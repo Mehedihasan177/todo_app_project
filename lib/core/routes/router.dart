@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo_app_project/core/routes/route_name.dart';
-import 'package:todo_app_project/ui/screens/home_screen.dart';
-import 'package:todo_app_project/ui/screens/splash_screen.dart';
+import 'package:todo_app_project/features/todo_details/ui/screens/home_screen.dart';
+import 'package:todo_app_project/features/todo_details/ui/screens/splash_screen.dart';
 
 class RouteGenerator {
   static pushNamed(BuildContext context, String pageName) {

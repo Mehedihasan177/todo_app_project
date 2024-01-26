@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:todo_app_project/services/theme_services.dart';
+import 'package:todo_app_project/core/services/theme_services.dart';
 import 'package:get/get.dart';
 import '../theme.dart';
 

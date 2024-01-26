@@ -1,11 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:todo_app_project/services/theme_services.dart';
-import 'package:todo_app_project/ui/screens/home_screen.dart';
 import 'package:get/get.dart';
-import 'package:todo_app_project/ui/screens/splash_screen.dart';
-import 'package:todo_app_project/ui/theme.dart';
+import 'package:todo_app_project/core/routes/router.dart';
+import 'package:todo_app_project/core/services/theme_services.dart';
+import 'package:todo_app_project/features/todo_details/ui/theme.dart';
 
 import 'core/app_component/app_component.dart';
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -36,7 +35,7 @@ class _MyAppState extends State<MyApp> {
       darkTheme: Themes.dark,
       themeMode: _ts.theme,
       debugShowCheckedModeBanner: false,
-      home: SplashScreen(),
+      onGenerateRoute: RouteGenerator.onRouteGenerate,
     );
   }
 }

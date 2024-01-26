@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:todo_app_project/controllers/task_controller.dart';
-import 'package:todo_app_project/course_details_play/data/model/course_model.dart';
-import 'package:todo_app_project/models/task.dart';
-import 'package:todo_app_project/ui/theme.dart';
+import 'package:todo_app_project/features/todo_details/ui/controllers/task_controller.dart';
+import 'package:todo_app_project/features/todo_details/data/model/course_model.dart';
+import 'package:todo_app_project/features/todo_details/ui/theme.dart';
 
 class TaskTile extends StatefulWidget {
   final TodoList task;

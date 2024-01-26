@@ -1,12 +1,12 @@
-import '../../../../../../core/data/model/api_response.dart';
+import '../../../../../../../core/data/model/api_response.dart';
 // import '../../domain/repository/course_repository.dart';
 import '../../domain/repository/course_repository.dart';
 
 import '../model/course_model.dart';
 import '../services/course_services.dart';
 
-class CourseDetailsRepositoryImplement extends CourseDetailsRepository {
-  CourseDetailsRepositoryImplement(CourseDetailsServices fetchDataServices)
+class ToDoDetailsRepositoryImplement extends ToDoDetailsRepository {
+  ToDoDetailsRepositoryImplement(ToDoDetailsServices fetchDataServices)
       : super(fetchDataServices);
 
   @override
@@ -24,5 +24,9 @@ class CourseDetailsRepositoryImplement extends CourseDetailsRepository {
   @override
   Future<Future<TodoList?>> completeTodoItem({required String documentId}) async {
     return fetchDataServices.completeTodoItem(documentId: documentId);
+  }
+  @override
+  Future<Future<TodoList?>> deleteCollectionAndReturnItem() async {
+    return fetchDataServices.deleteCollectionAndReturnItem();
   }
 }

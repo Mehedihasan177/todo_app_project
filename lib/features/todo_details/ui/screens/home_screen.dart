@@ -3,15 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:todo_app_project/controllers/task_controller.dart';
-import 'package:todo_app_project/models/task.dart';
-import 'package:todo_app_project/ui/screens/add_task_screen.dart';
-import 'package:todo_app_project/ui/size_config.dart';
-import 'package:todo_app_project/ui/theme.dart';
-import 'package:todo_app_project/ui/widgets/customAppBar_Widget.dart';
+import 'package:todo_app_project/features/todo_details/ui/controllers/task_controller.dart';
+import 'package:todo_app_project/features/todo_details/ui/screens/add_task_screen.dart';
+import 'package:todo_app_project/features/todo_details/ui/size_config.dart';
+import 'package:todo_app_project/features/todo_details/ui/theme.dart';
+import 'package:todo_app_project/features/todo_details/ui/widgets/customAppBar_Widget.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:todo_app_project/ui/widgets/task_tile.dart';
+import 'package:todo_app_project/features/todo_details/ui/widgets/task_tile.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -65,6 +64,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         InkWell(
                           onTap: (){
                             // _taskController.deleteAllTasks();
+                            _taskController.deleteCollectionAndReturnItem();
                           },
                           child: const Icon(Icons.delete, color: Colors.red, size: 25,),
                         )
@@ -75,6 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 _tasks(),
               ],
             ),
+          
           );
         }
       ),
