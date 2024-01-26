@@ -1,7 +1,7 @@
 
 import '../../../../../../core/data/model/api_response.dart';
-import '../../data/model/course_model.dart';
-import '../../data/services/course_services.dart';
+import '../../data/model/todo_model.dart';
+import '../../data/services/todo_services.dart';
 
 abstract class ToDoDetailsRepository {
   final ToDoDetailsServices fetchDataServices;

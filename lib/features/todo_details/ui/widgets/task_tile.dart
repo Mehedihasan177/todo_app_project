@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_app_project/features/todo_details/ui/controllers/task_controller.dart';
-import 'package:todo_app_project/features/todo_details/data/model/course_model.dart';
+import 'package:todo_app_project/features/todo_details/data/model/todo_model.dart';
 import 'package:todo_app_project/features/todo_details/ui/theme.dart';
 
 class TaskTile extends StatefulWidget {
@@ -82,7 +82,7 @@ class _TaskTileState extends State<TaskTile> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${widget.task.note} ${widget.task.id}',
+                        '${widget.task.note}',
                         style: const TextStyle(color: Colors.white),
                       ),
                       Row(

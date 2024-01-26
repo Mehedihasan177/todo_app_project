@@ -1,11 +1,9 @@
 // ignore_for_file: unnecessary_null_comparison
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:todo_app_project/core/data/model/api_response.dart';
 
-import '../model/todo_model.dart';
+import '../model/course_model.dart';
 
 class ToDoDetailsServices {
   final FirebaseFirestore firebaseStore = FirebaseFirestore.instance;

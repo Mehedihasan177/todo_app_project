@@ -1,9 +1,9 @@
 import '../../../../../../../core/data/model/api_response.dart';
 // import '../../domain/repository/course_repository.dart';
-import '../../domain/repository/course_repository.dart';
+import '../../domain/repository/todo_repository.dart';
 
-import '../model/course_model.dart';
-import '../services/course_services.dart';
+import '../model/todo_model.dart';
+import '../services/todo_services.dart';
 
 class ToDoDetailsRepositoryImplement extends ToDoDetailsRepository {
   ToDoDetailsRepositoryImplement(ToDoDetailsServices fetchDataServices)

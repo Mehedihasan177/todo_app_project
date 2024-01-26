@@ -1,8 +1,8 @@
 
 
 import '../../../../../../../core/data/model/api_response.dart';
-import '../../data/model/course_model.dart';
-import 'course_usecase.dart';
+import '../../data/model/todo_model.dart';
+import 'todo_usecase.dart';
 
 
 class ToDoDetailsPassUseCase extends ToDoDetailsUseCase {

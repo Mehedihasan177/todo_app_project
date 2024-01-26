@@ -3,12 +3,12 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:todo_app_project/core/app_component/app_component.dart';
-import 'package:todo_app_project/features/todo_details/domain/repository/course_repository.dart';
-import 'package:todo_app_project/features/todo_details/domain/usecase/course_pass_usecase.dart';
+import 'package:todo_app_project/features/todo_details/domain/repository/todo_repository.dart';
+import 'package:todo_app_project/features/todo_details/domain/usecase/todo_pass_usecase.dart';
 import 'package:todo_app_project/main.dart';
 import 'package:todo_app_project/features/todo_details/ui/widgets/custom_toast.dart';
 
-import '../../data/model/course_model.dart';
+import '../../data/model/todo_model.dart';
 
 class TaskController extends GetxController {
   var selectDate = DateTime.now().obs;
