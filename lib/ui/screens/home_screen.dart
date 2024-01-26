@@ -29,7 +29,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _taskController.getTask();
     SizeConfig.orientation = Orientation.portrait;
     SizeConfig.screenHeight = 100;
     SizeConfig.screenWidth = 100;
@@ -40,37 +39,44 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
       appBar: const CustomAppBar(),
-      body: Container(
-        margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
-        child: Column(
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+      body: GetBuilder<TaskController>(
+        initState: (state) {
+          _taskController.fetchToDoList();
+        },
+        builder: (context) {
+          return Container(
+            margin: const EdgeInsets.only(top: 10, left: 20, right: 20),
+            child: Column(
               children: [
-                Text(
-                  '${DateFormat.yMMMMd().format(DateTime.now())}',
-                  style: Themes().homeScreenSubHeadingTextStyle,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'TO DO',
-                      style: Themes().homeScreenHeadingTextStyle,
+                      '${DateFormat.yMMMMd().format(DateTime.now())}',
+                      style: Themes().homeScreenSubHeadingTextStyle,
                     ),
-                    InkWell(
-                      onTap: (){
-                        _taskController.deleteAllTasks();
-                      },
-                      child: const Icon(Icons.delete, color: Colors.red, size: 25,),
-                    )
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'TO DO',
+                          style: Themes().homeScreenHeadingTextStyle,
+                        ),
+                        InkWell(
+                          onTap: (){
+                            // _taskController.deleteAllTasks();
+                          },
+                          child: const Icon(Icons.delete, color: Colors.red, size: 25,),
+                        )
+                      ],
+                    ),
                   ],
                 ),
+                _tasks(),
               ],
             ),
-            _tasks(),
-          ],
-        ),
+          );
+        }
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: primaryClr,
@@ -87,18 +93,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _tasks() {
     return Expanded(child: Obx(() {
-      if (_taskController.taskList.isEmpty) {
+      if(_taskController.isLoading.value){
+        return Center(child: CircularProgressIndicator(),);
+      }
+      else if (_taskController.dataList.isEmpty) {
         return _noTasksMessage();
       } else {
-        return AnimationLimiter(
+        return Obx(() => AnimationLimiter(
           child: ListView.builder(
               scrollDirection:
                   MediaQuery.of(context).orientation == Orientation.portrait
                       ? Axis.vertical
                       : Axis.horizontal,
-              itemCount: _taskController.taskList.length,
+              itemCount: _taskController.dataList.length,
               itemBuilder: (BuildContext context, int index) {
-                Task task = _taskController.taskList[index];
+                var task = _taskController.dataList[index];
                 
                   return AnimationConfiguration.staggeredList(
                     position: index,
@@ -112,7 +121,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   );
                 
               }),
-        );
+        ),
+      );
       }
     }));
   }

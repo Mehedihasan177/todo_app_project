@@ -1,16 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:todo_app_project/controllers/task_controller.dart';
+import 'package:todo_app_project/course_details_play/data/model/course_model.dart';
 import 'package:todo_app_project/models/task.dart';
 import 'package:todo_app_project/ui/theme.dart';
 
-class TaskTile extends StatelessWidget {
+class TaskTile extends StatefulWidget {
+  final TodoList task;
   TaskTile({Key? key, required this.task}) : super(key: key);
-  final Task task;
+
+  @override
+  State<TaskTile> createState() => _TaskTileState();
+}
+
+class _TaskTileState extends State<TaskTile> {
   final TaskController _taskController = Get.put(TaskController());
+
   @override
   Widget build(BuildContext context) {
-    print(task.date);
+    print(widget.task.date);
     return Container(
       height: MediaQuery.of(context).orientation == Orientation.portrait
           ? MediaQuery.of(context).size.height * 0.17
@@ -25,9 +34,9 @@ class TaskTile extends StatelessWidget {
               ? 20
               : 0),
       decoration: BoxDecoration(
-          color: task.color == 0 ? bluishClr : Colors.green,
+          color: widget.task.isComplete == false ? bluishClr : Colors.green,
           borderRadius: BorderRadius.circular(10)),
-      child: Row(
+      child: Obx(() => Row(
         children: [
           Expanded(
             child: Container(
@@ -36,7 +45,7 @@ class TaskTile extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '${task.title}',
+                    '${widget.task.title}',
                     style: Themes().taskTileHeadingTextStyle,
                   ),
                   const SizedBox(
@@ -54,10 +63,11 @@ class TaskTile extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('${task.startTime} - ${task.endTime}',
+                          
+                          Text('${widget.task.startTime} - ${widget.task.endTime}',
                               style: const TextStyle(color: Colors.white)),
                               Text(
-                            '${task.date.toString()}',
+                            '${DateFormat('M/d/yyyy').format(widget.task.date ?? DateTime.now())}',
                             style: const TextStyle(color: Colors.white),
                           ),
                         ],
@@ -73,17 +83,23 @@ class TaskTile extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${task.note}',
+                        '${widget.task.note} ${widget.task.id}',
                         style: const TextStyle(color: Colors.white),
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          task.isCompleted == 0
+                         _taskController.isComplete.value? Center(child: CircularProgressIndicator(),) : widget.task.isComplete == false
                               ?  InkWell(
                                 onTap: (){
-                                  _taskController.markAsCompleted(task.id);
+                                  // _taskController.markAsCompleted(task.id);
+                                  setState(() {
+                                    widget.task.isComplete = true;
+                                  });
+                                    
+                                  
+                                  _taskController.completeTodoListItem(documentId: widget.task.id);
                                 },
                                 child: const Icon(Icons.check_circle_rounded, color: Colors.green, size: 25,)) :
                                 
@@ -92,12 +108,16 @@ class TaskTile extends StatelessWidget {
                                SizedBox(width: 15,),
                             InkWell(
                               onTap: (){
-                                _taskController.deleteTask(task.id);
+                                _taskController.dataList.remove(widget.task);
+                                _taskController.deleteTodoList(documentId: widget.task.id);
+                                // _taskController.deleteTask(task.id);
                               },
                               child: const Icon(Icons.delete_forever_rounded, color: Colors.red, size: 25)),
                                 
                         ],
                       )
+                    
+                    
                     ],
                   ))
                 ],
@@ -106,12 +126,13 @@ class TaskTile extends StatelessWidget {
           ),
           RotatedBox(
             quarterTurns: 3,
-            child: task.isCompleted == 0
+            child: widget.task.isComplete == false
                 ? const Text('TODO', style: TextStyle(color: Colors.white))
                 : const Text('COMPLETED', style: TextStyle(color: Colors.white)),
           )
         ],
       ),
+    )
     );
   
   }

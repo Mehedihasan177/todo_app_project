@@ -45,6 +45,12 @@ dependencies:
   flutter_svg: 
   flutter_launcher_icons: 
   rxdart:
+  firebase_core:
+  firebase_auth:
+  cloud_firestore:
+  get_it:
+  logger:
+  fluttertoast: ^8.2.4
 
 dev_dependencies:
   flutter_test:

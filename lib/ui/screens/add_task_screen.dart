@@ -1,3 +1,6 @@
+import 'dart:ffi';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -17,235 +20,180 @@ class AddTaskScreen extends StatefulWidget {
 }
 
 class _AddTaskScreenState extends State<AddTaskScreen> {
-  final TaskController _taskController = Get.find();
+  final TaskController taskController = Get.find();
   final _formKey = GlobalKey<FormState>();
-
-  final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _noteController = TextEditingController();
-  final TextEditingController _dateController = TextEditingController();
-  final TextEditingController _startTimeController = TextEditingController();
-  final TextEditingController _endTimeController = TextEditingController();
-  final TextEditingController _reminderController = TextEditingController();
-  final TextEditingController _repeatController = TextEditingController();
-
-
-  String _selectedDate = DateFormat.yMd().format(DateTime.now());
-  String _startDate = DateFormat('hh:mm a').format(DateTime.now());
-  String _endDate =
-      DateFormat('hh:mm a').format(DateTime.now().add(Duration(minutes: 15)));
-  int _selectedColor = 0;
+  @override
+  void initState() {
+    taskController.selecteTime = TimeOfDay.now();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).primaryColor,
-      appBar: CustomAppBar(
-        leadingWidget: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () => Get.back(),
+        backgroundColor: Theme.of(context).primaryColor,
+        appBar: CustomAppBar(
+          leadingWidget: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () => Get.back(),
+          ),
         ),
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            margin: EdgeInsets.only(top: 15, left: 20, right: 20),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+        body: Obx(
+          () => SafeArea(
+            child: SingleChildScrollView(
+              child: Container(
+                margin: EdgeInsets.only(top: 15, left: 20, right: 20),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
                     children: [
-                      Text(
-                        "Add Task",
-                        style: TextStyle(
-                            color: Get.isDarkMode ? Colors.white : darkGreyClr,
-                            fontSize: 23,
-                            fontWeight: FontWeight.bold),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "Add Task",
+                            style: TextStyle(
+                                color:
+                                    Get.isDarkMode ? Colors.white : darkGreyClr,
+                                fontSize: 23,
+                                fontWeight: FontWeight.bold),
+                          )
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 25,
+                      ),
+                      InputField(
+                        isEnabled: true,
+                        hint: 'Enter Title',
+                        label: 'Title',
+                        iconOrdrop: 'icon',
+                        controller: taskController.titleController.value,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      InputField(
+                        isEnabled: true,
+                        hint: 'Enter Note',
+                        label: 'Note',
+                        iconOrdrop: 'icon',
+                        controller: taskController.noteController.value,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      InputField(
+                        controller: taskController.dateController.value,
+                        isEnabled: false,
+                        hint: '${DateFormat.yMd().format(DateTime.now())}',
+                        label: 'Date',
+                        iconOrdrop: 'button',
+                        widget: IconButton(
+                          icon: Icon(Icons.date_range),
+                          onPressed: () async {
+                            _selectDate(context);
+                          },
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                              width: 165,
+                              child: InputField(
+                                isEnabled: false,
+                                controller:
+                                    taskController.startTimeController.value,
+                                label: 'Start Time',
+                                iconOrdrop: 'button',
+                                hint: taskController.startDate.value.toString(),
+                                widget: IconButton(
+                                  icon: Icon(Icons.access_time),
+                                  onPressed: () async {
+                                    _selectStartTime(context);
+                                    // });
+                                  },
+                                ),
+                              )),
+                          SizedBox(
+                              width: 165,
+                              child: InputField(
+                                controller:
+                                    taskController.endTimeController.value,
+                                isEnabled: false,
+                                iconOrdrop: 'button',
+                                label: 'End Time',
+                                hint: taskController.endDate.value.toString(),
+                                widget: IconButton(
+                                  icon: Icon(Icons.access_time),
+                                  onPressed: () {
+                                    _selectEndTime(context);
+                                  },
+                                ),
+                              )),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          //_colorPallete(),
+                         taskController.isAddTodoItem.value? Center(child: CircularProgressIndicator()) :ButtonWidget(
+                              label: 'Add Task',
+                              onTap: () async {
+                                
+                                if (taskController
+                                    .endTimeController.value.text.isEmpty) {
+                                  taskController.endTimeController.value.text =
+                                      DateFormat('hh:mm a').format(
+                                          DateTime.now()
+                                              .add(Duration(minutes: 15)));
+                                }
+                                if (taskController
+                                    .startTimeController.value.text.isEmpty) {
+                                  taskController
+                                          .startTimeController.value.text =
+                                      DateFormat('hh:mm a')
+                                          .format(DateTime.now());
+                                }
+                                if (taskController
+                                    .dateController.value.text.isEmpty) {
+                                  taskController.dateController.value.text =
+                                      DateFormat.yMd().format(DateTime.now());
+                                }
+                                
+                                taskController.addToDoList().then((value) => taskController.clearData()).then((value) => taskController.fetchToDoList().then((value) => Navigator.pop(context)));
+                              },
+                              color: primaryClr)
+                        ],
                       )
                     ],
                   ),
-                  const SizedBox(
-                    height: 25,
-                  ),
-                  InputField(
-                    isEnabled: true,
-                    hint: 'Enter Title',
-                    label: 'Title',
-                    iconOrdrop: 'icon',
-                    controller: _titleController,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  InputField(
-                    isEnabled: true,
-                    hint: 'Enter Note',
-                    label: 'Note',
-                    iconOrdrop: 'icon',
-                    controller: _noteController,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  InputField(
-                    controller: _dateController,
-                    isEnabled: false,
-                    hint: '${_selectedDate.toString()}',
-                    label: 'Date',
-                    iconOrdrop: 'button',
-                    widget: IconButton(
-                      icon: Icon(Icons.date_range),
-                      onPressed: () {
-                        _selectDate(context);
-                      },
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                          width: 165,
-                          child: InputField(
-                            isEnabled: false,
-                            controller: _startTimeController,
-                            label: 'Start Time',
-                            iconOrdrop: 'button',
-                            hint: _startDate.toString(),
-                            widget: IconButton(
-                              icon: Icon(Icons.access_time),
-                              onPressed: () {
-                                _selectStartTime(context);
-                              },
-                            ),
-                          )),
-                      SizedBox(
-                          width: 165,
-                          child: InputField(
-                            controller: _endTimeController,
-                            isEnabled: false,
-                            iconOrdrop: 'button',
-                            label: 'End Time',
-                            hint: _endDate.toString(),
-                            widget: IconButton(
-                              icon: Icon(Icons.access_time),
-                              onPressed: () {
-                                _selectEndTime(context);
-                              },
-                            ),
-                          )),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      //_colorPallete(),
-                      ButtonWidget(
-                          label: 'Add Task',
-                          onTap: () async {
-                            _submitDate();
-                            _submitStartTime();
-                            _submitEndTime();
-                            if (_formKey.currentState!.validate()) {
-                              final Task task = Task();
-                              _addTaskToDB(task);
-                              await _taskController.addTask(task);
-                              Get.back();
-                            }
-                          },
-                          color: primaryClr)
-                    ],
-                  )
-                ],
+                ),
               ),
             ),
           ),
-        ),
-      ),
-    );
-  }
-
-  // Widget _colorPallete() {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Text(
-  //         'Color',
-  //         style: TextStyle(
-  //             color: Get.isDarkMode ? Colors.white : darkGreyClr,
-  //             fontWeight: FontWeight.bold,
-  //             fontSize: 17),
-  //       ),
-  //       Wrap(
-  //         children: List.generate(
-  //             3,
-  //             (index) => GestureDetector(
-  //                   onTap: () {
-  //                     debugPrint(_selectedColor.toString());
-  //                     setState(() {
-  //                       _selectedColor = index;
-  //                     });
-  //                   },
-  //                   child: Padding(
-  //                     padding: const EdgeInsets.only(right: 8.0, top: 5),
-  //                     child: CircleAvatar(
-  //                         child: _selectedColor == index
-  //                             ? Icon(
-  //                                 Icons.done,
-  //                                 color: Colors.white,
-  //                                 size: 16,
-  //                               )
-  //                             : SizedBox(),
-  //                         radius: 16,
-  //                         backgroundColor: index == 0
-  //                             ? primaryClr
-  //                             : index == 1
-  //                                 ? pinkClr
-  //                                 : orangeClr),
-  //                   ),
-  //                 )),
-  //       )
-  //     ],
-  //   );
-  // }
-
-  _addTaskToDB(Task task) {
-    task.isCompleted = 0;
-    task.color = -_selectedColor;
-    task.title = _titleController.text;
-    task.note = _noteController.text;
-    task.date = _selectedDate.toString();
-    task.startTime = _startDate;
-    task.endTime = _endDate;
+        ));
   }
 
   _selectDate(BuildContext context) async {
-    final DateTime? selected = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      currentDate: DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2025),
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
 
-    );
-    setState(() {
-      if(selected != null){
-        _selectedDate = DateFormat.yMd().format(selected).toString();
-      }
-      else
-        _selectedDate = DateFormat.yMd().format(DateTime.now()).toString();
-    });
-  }
-
-  _submitDate() {
-    _dateController.text = _selectedDate;
+    if (picked != null) {
+      taskController.dateController.value.text =
+          DateFormat('MM/dd/yyyy').format(picked);
+    }
   }
 
   _selectStartTime(BuildContext context) async {
@@ -254,13 +202,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       initialTime: TimeOfDay.now(),
     );
     String formattedTime = selected!.format(context);
-    setState(() {
-      _startDate = formattedTime;
-    });
-  }
-
-  _submitStartTime() {
-    _startTimeController.text = _startDate;
+    // setState(() {
+    taskController.startTimeController.value.text = formattedTime;
   }
 
   _selectEndTime(BuildContext context) async {
@@ -269,14 +212,8 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
       initialTime: TimeOfDay.now(),
     );
     String formattedTime = selected!.format(context);
-    setState(() {
-      _endDate = formattedTime;
-    });
+    // setState(() {
+    taskController.endTimeController.value.text = formattedTime;
+    // });
   }
-
-  _submitEndTime() {
-    _endTimeController.text = _endDate;
-  }
-
-
 }

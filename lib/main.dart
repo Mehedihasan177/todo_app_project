@@ -1,16 +1,19 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:todo_app_project/db/db_helper.dart';
 import 'package:todo_app_project/services/theme_services.dart';
 import 'package:todo_app_project/ui/screens/home_screen.dart';
 import 'package:get/get.dart';
 import 'package:todo_app_project/ui/screens/splash_screen.dart';
 import 'package:todo_app_project/ui/theme.dart';
 
+import 'core/app_component/app_component.dart';
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
-  await DBHelper().database;
+  await init();
+  await Firebase.initializeApp();
   runApp(MyApp());
 
 }
